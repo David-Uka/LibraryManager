@@ -12,7 +12,7 @@ const books = [
     { title: "Moby-Dick", author: "Herman Melville", year: 1851, genre: "Adventure" }
 ];
 
-// Function to process book data
+// Task 1: Function to process book data
 function processBookData(books) {
     if (!Array.isArray(books)) {
         throw new Error("Invalid input: Expected an array of books.");
@@ -32,7 +32,7 @@ function processBookData(books) {
     };
 }
 
-// Library Class
+// Task 2: Library Class
 class Library {
     constructor(initialBooks = []) {
         this.books = [];
