@@ -12,6 +12,26 @@ const books = [
     { title: "Moby-Dick", author: "Herman Melville", year: 1851, genre: "Adventure" }
 ];
 
+// Function to process book data
+function processBookData(books) {
+    if (!Array.isArray(books)) {
+        throw new Error("Invalid input: Expected an array of books.");
+    }
+
+    const booksAfter2000 = books.filter(book => book.year > 2000);
+    const authors = [...new Set(books.map(book => book.author))].sort();
+    const genreCount = books.reduce((acc, book) => {
+        acc[book.genre] = (acc[book.genre] || 0) + 1;
+        return acc;
+    }, {});
+
+    return {
+        booksAfter2000,
+        sortedAuthors: authors,
+        genreCount
+    };
+}
+
 // Library Class
 class Library {
     constructor(initialBooks = []) {
@@ -76,7 +96,11 @@ class Library {
             if (!Array.isArray(parsedBooks)) {
                 throw new Error("Invalid JSON format: Expected an array of books.");
             }
-            return new Library(parsedBooks);
+            const processedData = processBookData(parsedBooks);
+            const library = new Library(parsedBooks);
+            library.booksAfter2000 = processedData.booksAfter2000;
+            library.genreCounts = processedData.genreCount;
+            return library;
         } catch (error) {
             throw new Error("Error parsing JSON: " + error.message);
         }
