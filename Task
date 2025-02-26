@@ -1,0 +1,90 @@
+Task 1: Working with Arrays of Books*  
+Goal: Get better at using arrays, loops, and functions in JavaScript.  
+Problem:  
+You’re going to create a function called processBookData(books) that works with a list of books. Each book is an object with details like title, author, year, and genre. Your function should do the following:  
+1. Take the list of books as input.  
+2. Return an object with three things:  
+   - A list of books that were published after the year 2000.  
+   - A list of all the authors’ names, sorted in alphabetical order.  
+   - A count of how many books there are in each genre (e.g., { "Sci-Fi": 3, "Mystery": 2 }).  
+
+---
+
+### What You’ll Learn  
+- How to use array methods like filter, map, and reduce to work with data.  
+- How to sort lists and remove duplicates.  
+- How to handle errors, like what to do if the input is empty or not in the right format.  
+
+---
+
+### Steps to Get Started  
+1. Understand the Input:  
+   The input is an array of book objects. Each book looks something like this:  
+   js
+   {
+     title: "The Great Gatsby",
+     author: "F. Scott Fitzgerald",
+     year: 1925,
+     genre: "Classic"
+   }
+   
+
+2. Filter Books Published After 2000:  
+   Use the filter method to create a new array of books where the year is greater than 2000.  
+
+3. Sort Authors Alphabetically:  
+   Extract all the authors’ names, remove duplicates (if any), and sort them in alphabetical order.  
+
+4. Count Books by Genre:  
+   Use a loop or the reduce method to count how many books belong to each genre.  
+
+5. Handle Edge Cases:  
+   Think about what happens if the input is empty or not in the correct format. How will your function handle that?  
+
+---
+
+### Things to Think About  
+- Duplicate Authors: What if the same author wrote multiple books? How will you make sure their name only appears once in the sorted list?  
+- Grouping by Genre: How can you efficiently count the number of books in each genre?  
+- Error Handling: What should your function do if the input is empty or not an array?  
+
+---
+
+### Example Input and Output  
+Input:  
+js
+const books = [
+  { title: "Book A", author: "Author X", year: 1999, genre: "Sci-Fi" },
+  { title: "Book B", author: "Author Y", year: 2005, genre: "Mystery" },
+  { title: "Book C", author: "Author X", year: 2010, genre: "Sci-Fi" },
+  { title: "Book D", author: "Author Z", year: 2015, genre: "Mystery" }
+];
+
+
+Output:  
+js
+{
+  booksAfter2000: [
+    { title: "Book B", author: "Author Y", year: 2005, genre: "Mystery" },
+    { title: "Book C", author: "Author X", year: 2010, genre: "Sci-Fi" },
+    { title: "Book D", author: "Author Z", year: 2015, genre: "Mystery" }
+  ],
+  sortedAuthors: ["Author X", "Author Y", "Author Z"],
+  genreCount: { "Sci-Fi": 2, "Mystery": 2 }
+}
+
+
+---
+
+### Tips for Success  
+- Break the problem into smaller parts. For example, first focus on filtering the books, then move on to sorting the authors, and finally count the genres.  
+- Use console.log() to check your work at each step.  
+- If you get stuck, look up JavaScript array methods like filter, map, and reduce to see how they work.  
+
+---
+
+### Bonus Challenge  
+- Add a feature to your function that calculates the average year of publication for all the books.  
+- Modify the function to handle case-insensitive sorting of authors’ names (e.g., "author x" and "Author X" should be treated as the same).  
+
+This task will help you practice working with arrays, objects, and functions while solving a real-world problem. Take your time, and don’t be afraid to experiment!
