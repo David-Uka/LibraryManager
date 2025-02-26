@@ -98,15 +98,6 @@ class Library {
 // Example Usage
 const library = new Library(books);
 
-// Add a new book
-testBook = {
-  title: "Brave New World",  
-  author: "Aldous Huxley",  
-  year: 1932,  
-  genre: "Dystopian"  
-};
-library.addBook(testBook);
-
 // Change search parameters easily
 const searchParams = { genre: "Dystopian" };
 console.log(library.searchBooks(searchParams));
