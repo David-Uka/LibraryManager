@@ -88,3 +88,71 @@ js
 - Modify the function to handle case-insensitive sorting of authors’ names (e.g., "author x" and "Author X" should be treated as the same).  
 
 This task will help you practice working with arrays, objects, and functions while solving a real-world problem. Take your time, and don’t be afraid to experiment!
+*Task 3: Navigating Nested Categories in Your Library*  
+*Goal:* Learn to work with folders-within-folders structures using your Library class.  
+*Problem:*  
+Your library now needs to organize books into *nested categories*, like:  
+- A "Sci-Fi" category might have subcategories like "Dystopian" or "Space Opera".  
+- Each category can hold books and more subcategories.  
+
+Add a method getAllBookPaths() to your Library class that:  
+1. *Recursively explores* these nested categories.  
+2. Returns an array of all book paths in the format "Category/Subcategory/.../Book Title".  
+
+---
+
+### *Example Structure*  
+js  
+// Inside your Library class:  
+{  
+  name: "Fiction",  
+  books: [{ title: "The Hobbit" }],  
+  subcategories: [  
+    {  
+      name: "Sci-Fi",  
+      books: [{ title: "Dune" }],  
+      subcategories: [  
+        {  
+          name: "Dystopian",  
+          books: [{ title: "1984" }],  
+          subcategories: []  
+        }  
+      ]  
+    }  
+  ]  
+}  
+
+// getAllBookPaths() should return:  
+// ["Fiction/The Hobbit", "Fiction/Sci-Fi/Dune", "Fiction/Sci-Fi/Dystopian/1984"]  
+  
+
+---
+
+### *Questions to Guide You*  
+1. *Breaking Down the Problem:*  
+   - How do you start at the top-level category (e.g., "Fiction") and move "deeper" into subcategories step by step?  
+   - What’s the *repeating pattern* you can use for each category (check books → check subcategories → repeat)?  
+
+2. *Building Paths:*  
+   - If you’re in the "Sci-Fi/Dystopian" category, how do you keep track of the full path ("Fiction/Sci-Fi/Dystopian") as you go deeper?  
+
+3. *Connecting to Task 2:*  
+   - How will you adjust your existing Library class to store this nested structure instead of a flat list?  
+   - Does addBook() need to change to let users specify a category path (e.g., "Fiction/Sci-Fi")?  
+
+4. *Edge Cases:*  
+   - What if a category has *both books and subcategories*?  
+   - How do you avoid getting stuck in an infinite loop if a subcategory accidentally references itself?  
+
+---
+
+### *Hints*  
+- Think of nested categories like *folders on your computer*:  
+  - Open a folder → see files (books) and more folders (subcategories).  
+  - For every new folder you open, repeat the same steps.  
+- Use *string concatenation* to build paths (e.g., currentPath + "/" + categoryName).  
+- Start small! Test with a single category first, then add nesting.  
+
+---
+
+This builds on your Library class by introducing *hierarchical organization* and forces you to solve problems like "how do I repeat an action for every layer of nesting?"—a key skill for working with real-world data! 

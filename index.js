@@ -1,17 +1,3 @@
-// Configurable book list
-const books = [
-    { title: "The Hobbit", author: "J.R.R. Tolkien", year: 1937, genre: "Fantasy" },
-    { title: "1984", author: "George Orwell", year: 1949, genre: "Dystopian" },
-    { title: "To Kill a Mockingbird", author: "Harper Lee", year: 1960, genre: "Fiction" },
-    { title: "The Road", author: "Cormac McCarthy", year: 2006, genre: "Post-Apocalyptic" },
-    { title: "The Martian", author: "Andy Weir", year: 2011, genre: "Sci-Fi" },
-    { title: "Dune", author: "Frank Herbert", year: 1965, genre: "Sci-Fi" },
-    { title: "Brave New World", author: "Aldous Huxley", year: 1932, genre: "Dystopian" },
-    { title: "Fahrenheit 451", author: "Ray Bradbury", year: 1953, genre: "Dystopian" },
-    { title: "Pride and Prejudice", author: "Jane Austen", year: 1813, genre: "Romance" },
-    { title: "Moby-Dick", author: "Herman Melville", year: 1851, genre: "Adventure" }
-];
-
 // Task 1: Function to process book data
 function processBookData(books) {
     if (!Array.isArray(books)) {
@@ -34,14 +20,15 @@ function processBookData(books) {
 
 // Task 2: Library Class
 class Library {
-    constructor(initialBooks = []) {
+    constructor(initialBooks = [], initialCategories = []) {
         this.books = [];
         this.booksAfter2000 = [];
         this.genreCounts = {};
+        this.categories = initialCategories;
         initialBooks.forEach(book => this.addBook(book));
     }
 
-    addBook(book) {
+    addBook(book, categoryPath = "") {
         if (!book || typeof book !== 'object') {
             throw new Error("Invalid book entry: Expected an object.");
         }
@@ -54,6 +41,13 @@ class Library {
             this.booksAfter2000.push(book);
         }
         this.genreCounts[genre] = (this.genreCounts[genre] || 0) + 1;
+
+        // Add book to the specified category
+        const category = this.findOrCreateCategory(categoryPath);
+        if (!category.books) {
+            category.books = [];
+        }
+        category.books.push(book);
     }
 
     removeBook(title) {
@@ -66,6 +60,20 @@ class Library {
         this.genreCounts[removedBook.genre]--;
         if (this.genreCounts[removedBook.genre] === 0) {
             delete this.genreCounts[removedBook.genre];
+        }
+
+        // Remove book from the category
+        this.removeBookFromCategory(title, this.categories);
+    }
+
+    removeBookFromCategory(title, category) {
+        if (category.books) {
+            category.books = category.books.filter(book => book.title !== title);
+        }
+        if (category.subcategories) {
+            category.subcategories.forEach(subcategory => {
+                this.removeBookFromCategory(title, subcategory);
+            });
         }
     }
 
@@ -117,10 +125,80 @@ class Library {
             return 0;
         });
     }
+
+    // Task 3: Method to get all book paths
+    getAllBookPaths(category = this.categories, path = "", visited = new Set()) {
+        let paths = [];
+        if (visited.has(category)) {
+            throw new Error("Infinite loop detected: A subcategory references itself.");
+        }
+        visited.add(category);
+
+        if (category.books) {
+            paths = paths.concat(category.books.map(book => `${path}/${book.title}`));
+        }
+        if (category.subcategories) {
+            category.subcategories.forEach(subcategory => {
+                paths = paths.concat(this.getAllBookPaths(subcategory, `${path}/${subcategory.name}`, visited));
+            });
+        }
+        visited.delete(category);
+        return paths;
+    }
+
+    // Helper method to find or create a category based on the given path
+    findOrCreateCategory(path) {
+        if (!path) return this.categories;
+        const parts = path.split('/');
+        let currentCategory = this.categories;
+        parts.forEach(part => {
+            if (!currentCategory.subcategories) {
+                currentCategory.subcategories = [];
+            }
+            let subcategory = currentCategory.subcategories.find(sub => sub.name === part);
+            if (!subcategory) {
+                subcategory = { name: part, books: [], subcategories: [] };
+                currentCategory.subcategories.push(subcategory);
+            }
+            currentCategory = subcategory;
+        });
+        return currentCategory;
+    }
 }
 
 // Example Usage
-const library = new Library(books);
+const books = [
+    { title: "The Hobbit", author: "J.R.R. Tolkien", year: 1937, genre: "Fantasy" },
+    { title: "1984", author: "George Orwell", year: 1949, genre: "Dystopian" },
+    { title: "To Kill a Mockingbird", author: "Harper Lee", year: 1960, genre: "Fiction" },
+    { title: "The Road", author: "Cormac McCarthy", year: 2006, genre: "Post-Apocalyptic" },
+    { title: "The Martian", author: "Andy Weir", year: 2011, genre: "Sci-Fi" },
+    { title: "Dune", author: "Frank Herbert", year: 1965, genre: "Sci-Fi" },
+    { title: "Brave New World", author: "Aldous Huxley", year: 1932, genre: "Dystopian" },
+    { title: "Fahrenheit 451", author: "Ray Bradbury", year: 1953, genre: "Dystopian" },
+    { title: "Pride and Prejudice", author: "Jane Austen", year: 1813, genre: "Romance" },
+    { title: "Moby-Dick", author: "Herman Melville", year: 1851, genre: "Adventure" }
+];
+
+const categories = {
+    name: "Fiction",
+    books: [{ title: "The Hobbit" }],
+    subcategories: [
+        {
+            name: "Sci-Fi",
+            books: [{ title: "Dune" }],
+            subcategories: [
+                {
+                    name: "Dystopian",
+                    books: [{ title: "1984" }],
+                    subcategories: []
+                }
+            ]
+        }
+    ]
+};
+
+const library = new Library(books, categories);
 
 // Change search parameters easily
 const searchParams = { genre: "Dystopian" };
@@ -129,3 +207,8 @@ console.log(library.searchBooks(searchParams));
 console.log(library.getBooksByAuthor("J.R.R. Tolkien"));
 console.log(library.getBooksAfter2000());
 console.log(library.getGenreCounts());
+console.log(library.getAllBookPaths());
+
+// Adding a new book to a specific category
+library.addBook({ title: "Neuromancer", author: "William Gibson", year: 1984, genre: "Sci-Fi" }, "Fiction/Sci-Fi");
+console.log(library.getAllBookPaths());
