@@ -156,3 +156,94 @@ js
 ---
 
 This builds on your Library class by introducing *hierarchical organization* and forces you to solve problems like "how do I repeat an action for every layer of nesting?"—a key skill for working with real-world data! 
+
+### Task 4: Build Your Own Tools to Process Book Data*  
+*Goal:* Create your own versions of map, filter, and reduce to work with your library system from *Task 2*.  
+
+*Problem:*  
+1. **Recreate map, filter, and reduce** as standalone functions (e.g., myMap(array, callback)).  
+2. *Use these tools* to analyze your library’s book data (e.g., find all authors, count genres).  
+
+---
+
+### *What You’ll Learn*  
+- How to create functions that accept other functions as inputs (callbacks).  
+- How tools like map and filter work behind the scenes.  
+
+---
+
+### *How This Connects to Earlier Tasks*  
+In *Task 1/2*, you used built-in methods like filter to process book data. Now, you’ll *rebuild those tools yourself* and use them in your Library class!  
+
+---
+
+### *Steps to Get Started*  
+1. **Write myFilter:**  
+   Create a function that takes an array and a test function, then returns a new array with items that pass the test.  
+   - Example: Use myFilter to find all books published after 2000.  
+
+2. **Write myMap:**  
+   Create a function that takes an array and a transformation function, then returns a new array where each item is transformed.  
+   - Example: Use myMap to extract all book titles.  
+
+3. **Write myReduce:**  
+   Create a function that takes an array, a combining function, and an initial value, then returns a single value by combining all items.  
+   - Example: Use myReduce to count books per genre (like in Task 1).  
+
+4. *Test with Your Library Data:*  
+   Use your tools to replace the logic in your Library class (e.g., replace processBookData with myFilter and myReduce).  
+
+---
+
+### *Guiding Questions*  
+1. *Reusing Code:*  
+   - How can you use myFilter in your Library class to find books published after 2000?  
+   - Can myReduce replace the genre-counting logic from Task 1?  
+
+2. *Edge Cases:*  
+   - What happens if your library is empty? How will your tools handle that?  
+   - What if the callback function (e.g., (book) => book.year > 2000) is missing or broken?  
+
+3. *Performance:*  
+   - If your library has 10,000 books, will your tools still work efficiently?  
+
+---
+
+### *Example Workflow*  
+javascript  
+// Sample book data from your Library class  
+const books = [  
+  { title: "Book A", year: 1999, genre: "Sci-Fi" },  
+  { title: "Book B", year: 2005, genre: "Mystery" }  
+];  
+
+// Use your tools to:  
+// 1. Filter books after 2000  
+const booksAfter2000 = myFilter(books, (book) => book.year > 2000);  
+
+// 2. Extract titles  
+const titles = myMap(booksAfter2000, (book) => book.title);  
+
+// 3. Count genres  
+const genreCounts = myReduce(  
+  books,  
+  (counts, book) => {  
+    counts[book.genre] = (counts[book.genre] || 0) + 1;  
+    return counts;  
+  },  
+  {}  
+);  
+  
+
+---
+
+### *Hints*  
+- Start with myFilter—it’s the simplest. Use a for loop to check each item.  
+- Test your tools with small arrays first (e.g., [1, 2, 3]) before using them with book data.  
+- *Remember:* Your tools should *not* modify the original array (just like real map/filter).  
+
+---
+
+### *Why This Matters*  
+By rebuilding these tools, you’ll see how JavaScript’s built-in methods work and gain more control over your data processing. This will help you debug and improve your Library class from earlier tasks! 💡  
+

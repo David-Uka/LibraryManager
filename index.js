@@ -166,6 +166,37 @@ class Library {
     }
 }
 
+// Task 4: Custom map, filter, and reduce functions
+
+// Custom map function
+function myMap(array, callback) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        result.push(callback(array[i], i, array));
+    }
+    return result;
+}
+
+// Custom filter function
+function myFilter(array, callback) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        if (callback(array[i], i, array)) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+
+// Custom reduce function
+function myReduce(array, callback, initialValue) {
+    let accumulator = initialValue;
+    for (let i = 0; i < array.length; i++) {
+        accumulator = callback(accumulator, array[i], i, array);
+    }
+    return accumulator;
+}
+
 // Example Usage
 const books = [
     { title: "The Hobbit", author: "J.R.R. Tolkien", year: 1937, genre: "Fantasy" },
@@ -212,3 +243,18 @@ console.log(library.getAllBookPaths());
 // Adding a new book to a specific category
 library.addBook({ title: "Neuromancer", author: "William Gibson", year: 1984, genre: "Sci-Fi" }, "Fiction/Sci-Fi");
 console.log(library.getAllBookPaths());
+
+// Using custom map to get all authors
+const authors = myMap(books, book => book.author);
+console.log("Authors:", authors);
+
+// Using custom filter to get books published after 2000
+const booksAfter2000 = myFilter(books, book => book.year > 2000);
+console.log("Books after 2000:", booksAfter2000);
+
+// Using custom reduce to count genres
+const genreCount = myReduce(books, (acc, book) => {
+    acc[book.genre] = (acc[book.genre] || 0) + 1;
+    return acc;
+}, {});
+console.log("Genre count:", genreCount);
